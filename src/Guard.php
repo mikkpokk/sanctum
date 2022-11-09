@@ -66,13 +66,14 @@ class Guard
 
             $accessToken = $model::findToken($token);
 
-            if (! $this->isValidAccessToken($accessToken)) {
+            if (! $accessToken) {
                 return;
             }
 
-            $accessToken->load('tokenable');
+            $accessToken->loadMissing('tokenable');
 
-            if (! $this->supportsTokens($accessToken->tokenable)) {
+            if (! $this->isValidAccessToken($accessToken) &&
+                ! $this->supportsTokens($accessToken->tokenable)) {
                 return;
             }
 
